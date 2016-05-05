@@ -14,6 +14,30 @@ var Anuncio= mongoose.model("Anuncio");
 router.get("/", function (req,res, next){
     //filtro por nombre
     var name=req.query.nombre;
+    var start= parseInt(req.query.start) || 0;
+    var limit= parseInt(req.query.limit) || null;
+    var sort= req.query.sort || null;
+
+
+    var filtro ={};
+
+    if(typeof name !== "undefined"){
+        filtro.nombre = name;
+    }
+
+    Anuncio.list(filtro, start, limit, sort, function(err, rows){
+        if (err) {
+            res.json({success: false, err: err});
+            return;
+        }
+        res.json({success: true, rows: rows});
+
+    });
+
+    //antes de hacer static en modelo hice este código
+/*router.get("/", function (req,res, next){
+    //filtro por nombre
+    var name=req.query.nombre;
     var filter ={};
 
     if(typeof name !== "undefined"){
@@ -32,7 +56,7 @@ router.get("/", function (req,res, next){
             return;
         }
         res.json({success: true, rows: rows});
-    });
+    });*/
 });
 
 
