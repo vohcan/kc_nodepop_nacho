@@ -11,8 +11,9 @@ var app = express();
 //conexion bbdd con mongoose
 require("./lib/connectMongoose");
 
-//cargar modelo
+//cargar modelos
 require ("./models/Anuncio");
+require ("./models/Usuarios");
 
 
 
@@ -40,6 +41,7 @@ app.use('/users', require('./routes/users'));
 
 //rutas del api
 app.use("/api/v1/anuncios", require("./routes/api/v1/anuncios"));
+app.use("/api/v1/usuarios", require("./routes/api/v1/usuarios"));
 
 
 // catch 404 and forward to error handler
