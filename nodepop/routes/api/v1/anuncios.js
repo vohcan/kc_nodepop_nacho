@@ -10,56 +10,58 @@ var router = express.Router();
 var mongoose= require("mongoose");
 var Anuncio= mongoose.model("Anuncio");
 
-//listado de anuncios
+//listado completo de anuncios
+
 router.get("/", function (req,res, next){
-    //filtro por nombre
-    var name=req.query.nombre;
-    var start= parseInt(req.query.start) || 0;
-    var limit= parseInt(req.query.limit) || null;
-    var sort= req.query.sort || null;
+    
+    var name= req.query.nombre;
 
-
-    var filtro ={};
-
+   var criteria = {};
     if(typeof name !== "undefined"){
-        filtro.nombre = name;
+        criteria.nombre = name;
     }
-
-    Anuncio.list(filtro, start, limit, sort, function(err, rows){
-        if (err) {
-            res.json({success: false, err: err});
-            return;
-        }
-        res.json({success: true, rows: rows});
-
-    });
-
-    //antes de hacer static en modelo hice este código
-/*router.get("/", function (req,res, next){
-    //filtro por nombre
-    var name=req.query.nombre;
-    var filter ={};
-
-    if(typeof name !== "undefined"){
-        filter.nombre = name;
-    }
-
-    var query= Anuncio.find(filter);
-    //ordeno por nombre descendente
-    query.sort({nombre:-1});
-
-
-
-    query.exec(function(err,rows){
+   
+//filtrado por nombre
+    var consulta =Anuncio.find(criteria);
+    
+    consulta.sort({nombre:-1});
+    
+    consulta.exec(function(err,rows){
         if(err){
             next(err);
             return;
         }
         res.json({success: true, rows: rows});
-    });*/
+    });
 });
 
+//filtros 
 
+/*router.get("/filtros", function (req,res, next){
+
+    //filtrar por nombre
+    var name= req.query.nombre;
+
+    var criteria={};
+
+    if(typeof name !== "undefined"){
+        criteria.nombre = name;
+    }
+   
+
+    Anuncio.find(criteria).exec(function(err,rows){ 
+        if(err){
+            next(err);
+            return;
+        }
+        res.json({success: true, rows: rows});
+    });
+    
+
+    
+});*/
+
+//subir anuncios nuevos
 router.post("/", function (req, res, next){
     var anuncio = new Anuncio(req.body);
     console.log(anuncio);
