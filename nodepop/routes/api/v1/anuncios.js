@@ -10,9 +10,33 @@ var router = express.Router();
 var mongoose= require("mongoose");
 var Anuncio= mongoose.model("Anuncio");
 
+//usando metodos estaticos
+router.get ("/", function(req, res, next){
+    
+    var nombre= req.query.nombre;
+    var start = parseInt(req.query.start) || 0;
+    var limit = parseInt(req.query.limit) || null;
+    var sort = req.query.sort || null;
+
+    
+    var criteria= {};
+    
+    if (typeof nombre !== "undefined"){
+        criteria.nombre = nombre;
+    }
+    Anuncio.lista (criteria, start,limit,sort,function (err,rows) {
+        if(err) {
+            res.json({success: false, error: err});
+            return;
+        }
+        res.json({success: true, rows: rows});
+    });
+});
+
+
 //listado completo de anuncios
 
-router.get("/", function (req,res, next){
+/*router.get("/", function (req,res, next){
     
     var name= req.query.nombre;
 
@@ -20,13 +44,15 @@ router.get("/", function (req,res, next){
     if(typeof name !== "undefined"){
         criteria.nombre = name;
     }
+
    
 //filtrado por nombre
-    var consulta =Anuncio.find(criteria);
+    var query =Anuncio.find(criteria);
+
+    //ordenado de forma descendente
+    query.sort({nombre:-1});
     
-    consulta.sort({nombre:-1});
-    
-    consulta.exec(function(err,rows){
+    query.exec(function(err,rows){
         if(err){
             next(err);
             return;
@@ -35,31 +61,7 @@ router.get("/", function (req,res, next){
     });
 });
 
-//filtros 
-
-/*router.get("/filtros", function (req,res, next){
-
-    //filtrar por nombre
-    var name= req.query.nombre;
-
-    var criteria={};
-
-    if(typeof name !== "undefined"){
-        criteria.nombre = name;
-    }
-   
-
-    Anuncio.find(criteria).exec(function(err,rows){ 
-        if(err){
-            next(err);
-            return;
-        }
-        res.json({success: true, rows: rows});
-    });
-    
-
-    
-});*/
+*/
 
 //subir anuncios nuevos
 router.post("/", function (req, res, next){
