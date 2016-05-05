@@ -13,7 +13,7 @@ require("./lib/connectMongoose");
 
 //cargar modelos
 require ("./models/Anuncio");
-require ("./models/Usuarios");
+require ("./models/Usuario");
 
 
 
