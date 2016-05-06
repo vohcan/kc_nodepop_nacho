@@ -22,7 +22,7 @@ anuncioSchema.statics.lista = function(filter, start,limit, sort, cb){
     query.skip(start);
     query.limit(limit);
     query.sort(sort);
-    
+    //var sale= Anuncio.find(sale)
     
     return query.exec(cb);
     

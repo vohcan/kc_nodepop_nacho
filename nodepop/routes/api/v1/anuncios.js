@@ -17,12 +17,19 @@ router.get ("/", function(req, res, next){
     var start = parseInt(req.query.start) || 0;
     var limit = parseInt(req.query.limit) || null;
     var sort = req.query.sort || null;
+    
+    var venta = req.query.venta;
+    var tags= req.query.tags;
+    var precio= req.query.precio;
 
     
     var criteria= {};
     
     if (typeof nombre !== "undefined"){
-        criteria.nombre = nombre;
+
+        //case unsensitive
+        criteria.nombre= {$regex: nombre, $options: "i" };
+
     }
     Anuncio.lista (criteria, start,limit,sort,function (err,rows) {
         if(err) {
@@ -30,6 +37,29 @@ router.get ("/", function(req, res, next){
             return;
         }
         res.json({success: true, rows: rows});
+    });
+});
+
+//sacar ventas
+router.get("/ventas", function(req, res){
+    var ventas= req.query.venta = true;
+    Anuncio.find({venta:ventas}).exec(function(err, ventas){
+        if(err){
+            next(err);
+            return;
+        }
+        res.json({success: true, ventas: ventas});
+    });
+});
+//sacar compras
+router.get("/compras", function(req, res){
+    var compras= req.query.venta = false;
+    Anuncio.find({venta:compras}).exec(function(err, compras){
+        if(err){
+            next(err);
+            return;
+        }
+        res.json({success: true, compras: compras});
     });
 });
 
@@ -63,7 +93,7 @@ router.get ("/", function(req, res, next){
 
 */
 
-//subir anuncios nuevos
+//crear anuncios nuevos
 router.post("/", function (req, res, next){
     var anuncio = new Anuncio(req.body);
     console.log(anuncio);
