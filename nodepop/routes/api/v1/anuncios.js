@@ -10,6 +10,10 @@ var router = express.Router();
 var mongoose= require("mongoose");
 var Anuncio= mongoose.model("Anuncio");
 
+//auth
+var jwtAuth = require('../../../lib/jwtAuth');
+router.use(jwtAuth());
+
 //usando metodos estaticos
 router.get ("/", function(req, res, next){
     
