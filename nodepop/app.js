@@ -39,6 +39,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', require('./routes/index'));
 
 
+
+
+
 //rutas del api
 app.use("/api/v1/anuncios", require("./routes/api/v1/anuncios"));
 app.use("/api/v1/usuarios", require("./routes/api/v1/usuarios"));

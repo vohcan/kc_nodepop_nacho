@@ -11,8 +11,8 @@ var mongoose= require("mongoose");
 var Anuncio= mongoose.model("Anuncio");
 
 //auth
-var jwtAuth = require('../../../lib/jwtAuth');
-router.use(jwtAuth());
+/*var jwtAuth = require("../../../lib/jwtAuth");
+router.use(jwtAuth());*/
 
 //usando metodos estaticos
 router.get ("/", function(req, res, next){
@@ -67,7 +67,53 @@ router.get("/compras", function(req, res){
     });
 });
 
+//rango de precios
+router.get("/precios",function(req, res, next){
+    var precio = req.query.precio;
+    var rangos ={};
+    if(typeof precio !== "undefined"){
+        rangos.precio = precio;
+    }
+    if (precio =50-300){
+        rangos.precio = { '$gte': '50', '$lte': '300' }
+    }
+    if (precio =-1000){
+        rangos.precio = { '$lte':
+            '1000' }
+    }
+    
+    Anuncio.find(rangos).exec (function(err, datos){
+        if(err){
+            next(err);
+            return;
+        }
+        res.json({success: true, datos:datos});
+    });
 
+  
+    
+});
+
+//filtar por tags
+
+/*router.get("/tags", function(req, res, next){
+    var tag= req.query.tag;
+    var diftags={};
+    
+    if(typeof tag !== "undefined"){
+        diftags.tag= tag;
+    }
+    if (tag = work){
+        diftags.tag = {tag: work}
+    }
+    Anuncio.find(diftags).exec (function(err, tags){
+        if(err){
+            next(err);
+            return;
+        }
+        res.json({success: true, tags:tags});
+    });
+});*/
 //listado completo de anuncios
 
 /*router.get("/", function (req,res, next){
@@ -97,18 +143,6 @@ router.get("/compras", function(req, res){
 
 */
 
-//crear anuncios nuevos
-router.post("/", function (req, res, next){
-    var anuncio = new Anuncio(req.body);
-    console.log(anuncio);
-   anuncio.save(function(err, saved){
-        if(err) {
-            next(err);
-            return;
-        }
-        res.json({success: true, saved: saved});
 
-    });
-});
 
 module.exports = router;

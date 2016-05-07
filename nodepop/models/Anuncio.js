@@ -30,7 +30,6 @@ anuncioSchema.statics.lista = function(filter, start,limit, sort, cb){
 
 
 
-
 //asignamos a modelo
 
 var Anuncio = mongoose.model("Anuncio",anuncioSchema);

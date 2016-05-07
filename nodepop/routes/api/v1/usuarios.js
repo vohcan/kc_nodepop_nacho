@@ -4,7 +4,7 @@
 "use strict";
 var jwt= require("jsonwebtoken");
 var config = require('../../../local_config');
-
+var crypto= require ("crypto");
 var express= require("express");
 var router = express.Router();
 var Usuario = require("mongoose").model("Usuario");
@@ -15,8 +15,8 @@ router.post("/authenticate", function(req, res){
    var user = req.body.user;
     var pass =req.body.pass;
     var email =req.body.email;
-    
-    
+
+    var passHash = crypto.createHash('md5').update(pass).digest("hex");
 
     Usuario.findOne ({user: user}).exec(function(err, user){
         if(err) {
