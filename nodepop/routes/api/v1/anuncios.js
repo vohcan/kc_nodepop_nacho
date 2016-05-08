@@ -11,8 +11,23 @@ var mongoose= require("mongoose");
 var Anuncio= mongoose.model("Anuncio");
 
 //auth
-/*var jwtAuth = require("../../../lib/jwtAuth");
-router.use(jwtAuth());*/
+//var jwtAuth = require("../../../lib/jwtAuth");
+//router.use(jwtAuth());
+
+
+//crear anuncios
+router.post("/", function(req,res,next){
+    var anuncio= new Anuncio(req.body);
+    anuncio.save(function(err,saved){
+       if(err){
+           next(err);
+           return;
+       }
+       res.json({success: true, saved:saved});
+    });
+});
+
+
 
 //usando metodos estaticos
 router.get ("/", function(req, res, next){
